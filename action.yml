@@ -1,0 +1,21 @@
+name: Setup ArchSmith
+description: Install the ArchSmith CLI and add it to PATH
+author: ayeshLK
+
+branding:
+  icon: box
+  color: blue
+
+inputs:
+  version:
+    description: npm version, range, or dist-tag of @archsmith/cli to install
+    required: false
+    default: latest
+
+outputs:
+  version:
+    description: Exact installed version of @archsmith/cli
+
+runs:
+  using: node20
+  main: dist/index.js

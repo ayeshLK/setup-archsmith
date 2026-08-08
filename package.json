@@ -1,0 +1,32 @@
+{
+  "name": "setup-archsmith",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GitHub Action that installs the ArchSmith CLI",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --minify --source-map",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@actions/core": "3.0.1",
+    "@actions/exec": "3.0.0",
+    "@actions/io": "3.0.2",
+    "semver": "7.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "@types/semver": "7.8.0",
+    "@vercel/ncc": "0.44.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  },
+  "license": "Apache-2.0"
+}
