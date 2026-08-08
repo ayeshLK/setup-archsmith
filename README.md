@@ -17,7 +17,7 @@ steps:
   - uses: ayeshLK/setup-archsmith@v0
     with:
       version: 0.5.1
-  - run: archsmith validate docs/architecture.ir.json
+  - run: archsmith validate docs/architecture.archsmith.json
 ```
 
 The `version` input accepts an exact npm version, a range, or a dist-tag and defaults to `latest`:
@@ -42,11 +42,12 @@ installation and exposes that exact version as an output:
 
 ## Validate and render
 
-Each command handles one IR file:
+Each command handles one IR file. `*.archsmith.json` is the recommended filename convention, although the CLI can
+process any explicitly supplied JSON file path:
 
 ```yaml
-- run: archsmith validate docs/payments.ir.json
-- run: archsmith render docs/payments.ir.json -o docs/payments.svg
+- run: archsmith validate docs/payments.archsmith.json
+- run: archsmith render docs/payments.archsmith.json -o docs/payments.svg
 ```
 
 Use a static matrix for several files. Each matrix entry is a separate job, so it installs the CLI independently.
@@ -58,8 +59,8 @@ jobs:
       fail-fast: false
       matrix:
         file:
-          - docs/payments.ir.json
-          - docs/identity.ir.json
+          - docs/payments.archsmith.json
+          - docs/identity.archsmith.json
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,9 +79,9 @@ Rendering can make both paths explicit:
 strategy:
   matrix:
     diagram:
-      - input: docs/payments.ir.json
+      - input: docs/payments.archsmith.json
         output: docs/payments.svg
-      - input: docs/identity.ir.json
+      - input: docs/identity.archsmith.json
         output: docs/identity.svg
 
 steps:
