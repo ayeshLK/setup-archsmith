@@ -2,8 +2,13 @@
 
 [![CI](https://github.com/ayeshLK/setup-archsmith/actions/workflows/ci.yml/badge.svg)](https://github.com/ayeshLK/setup-archsmith/actions/workflows/ci.yml)
 [![Integration](https://github.com/ayeshLK/setup-archsmith/actions/workflows/integration.yml/badge.svg)](https://github.com/ayeshLK/setup-archsmith/actions/workflows/integration.yml)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-Setup%20ArchSmith-blue?logo=github)](https://github.com/marketplace/actions/setup-archsmith)
+[![GitHub release](https://img.shields.io/github/v/release/ayeshLK/setup-archsmith)](https://github.com/ayeshLK/setup-archsmith/releases/latest)
 
 Set up the [ArchSmith CLI](https://www.npmjs.com/package/@archsmith/cli) in a GitHub Actions workflow.
+
+[Setup ArchSmith is available on GitHub Marketplace](https://github.com/marketplace/actions/setup-archsmith) and can
+be used as `ayeshLK/setup-archsmith@v0`.
 
 This action:
 
@@ -178,11 +183,12 @@ commits, pull-request comments, hosted SVGs, and artifact management are intenti
 
 ## Releases and security
 
-During the `0.x` series, `v0` is a moving major tag and releases such as `v0.1.0` identify action versions. For
-security-sensitive workflows, pin the action to a full commit SHA and use Dependabot or another controlled process
-to review updates.
+Published versions are available from [GitHub Releases](https://github.com/ayeshLK/setup-archsmith/releases) and the
+[GitHub Marketplace listing](https://github.com/marketplace/actions/setup-archsmith). During the `0.x` series, `v0`
+is a moving major tag and releases such as `v0.1.0` identify action versions. For security-sensitive workflows, pin
+the action to a full commit SHA and use Dependabot or another controlled process to review updates.
 
-To prepare a release, update the version in `package.json`, push the validated changes to `main`, and run the
+To prepare the next release, update the version in `package.json`, push the validated changes to `main`, and run the
 **Release** workflow with the matching tag, such as `v0.1.0`. The workflow runs the full project check and creates a
 draft GitHub Release. Open that draft, select **Publish this Action to GitHub Marketplace**, choose its categories,
 and publish it. The publication event automatically moves `v0` to the released commit and smoke-tests the public
