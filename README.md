@@ -218,6 +218,11 @@ npm run check
 The generated `dist/` bundle is committed because JavaScript actions execute it directly. CI rebuilds the bundle and
 fails if the committed output is stale.
 
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing, and pull request
+guidance.
+
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
