@@ -1,0 +1,50 @@
+name: Integration
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 20
+            version: 0.5.1
+          - os: ubuntu-latest
+            node: 22
+            version: 0.5.x
+          - os: ubuntu-latest
+            node: 24
+            version: latest
+          - os: macos-latest
+            node: 20
+            version: latest
+          - os: windows-latest
+            node: 20
+            version: latest
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - id: setup
+        uses: ./
+        with:
+          version: ${{ matrix.version }}
+      - name: Verify output is exact semver
+        shell: bash
+        env:
+          INSTALLED_VERSION: ${{ steps.setup.outputs.version }}
+        run: node -e "if (!/^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(process.env.INSTALLED_VERSION ?? '')) process.exit(1)"
+      - name: Verify ArchSmith is on PATH
+        run: archsmith --version
