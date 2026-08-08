@@ -1,0 +1,152 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release tag to prepare, for example v0.1.0
+        required: true
+        type: string
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Require the default branch
+        if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          echo "Run this workflow from the default branch (${DEFAULT_BRANCH})." >&2
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run check
+
+      - name: Verify committed bundle is current
+        run: git diff --exit-code -- dist
+
+      - name: Validate release version
+        id: version
+        env:
+          RELEASE_TAG: ${{ inputs.version }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFileSync, readFileSync} from 'node:fs';
+
+          const tag = process.env.RELEASE_TAG ?? '';
+          if (!/^v0\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?$/u.test(tag)) {
+            throw new Error('Release version must be a v0 semantic version such as v0.1.0.');
+          }
+
+          const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+          if (`v${packageJson.version}` !== tag) {
+            throw new Error(`Release tag ${tag} does not match package.json version ${packageJson.version}.`);
+          }
+
+          appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\n`);
+          NODE
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            --draft \
+            --generate-notes \
+            --target "$GITHUB_SHA" \
+            --title "Setup ArchSmith $RELEASE_TAG"
+
+      - name: Add publication instructions
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          {
+            echo "## Draft release created"
+            echo
+            echo "Open the **${RELEASE_TAG}** draft in the repository Releases page."
+            echo "Select **Publish this Action to GitHub Marketplace**, choose categories, and publish it."
+            echo "This workflow will then update the moving \`v0\` tag and run a smoke test."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  promote:
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate published release
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFileSync} from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+
+          const tag = process.env.RELEASE_TAG ?? '';
+          if (!/^v0\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/u.test(tag)) {
+            throw new Error(`Published release tag ${tag} is not a stable v0 semantic version.`);
+          }
+
+          const sha = execFileSync('git', ['rev-list', '-n', '1', tag], {encoding: 'utf8'}).trim();
+          if (!/^[0-9a-f]{40}$/u.test(sha)) {
+            throw new Error(`Could not resolve release tag ${tag} to a commit.`);
+          }
+
+          appendFileSync(process.env.GITHUB_OUTPUT, `sha=${sha}\n`);
+          NODE
+
+      - name: Update moving v0 tag
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          git tag --force v0 "$RELEASE_SHA"
+          git push origin refs/tags/v0 --force
+
+  smoke-test:
+    if: github.event_name == 'release' && !github.event.release.prerelease
+    needs: promote
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - id: setup
+        uses: ayeshLK/setup-archsmith@v0
+        with:
+          version: latest
+
+      - name: Verify released action
+        env:
+          INSTALLED_VERSION: ${{ steps.setup.outputs.version }}
+        run: |
+          node -e "if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(process.env.INSTALLED_VERSION ?? '')) process.exit(1)"
+          archsmith --version

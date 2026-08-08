@@ -182,6 +182,12 @@ During the `0.x` series, `v0` is a moving major tag and releases such as `v0.1.0
 security-sensitive workflows, pin the action to a full commit SHA and use Dependabot or another controlled process
 to review updates.
 
+To prepare a release, update the version in `package.json`, push the validated changes to `main`, and run the
+**Release** workflow with the matching tag, such as `v0.1.0`. The workflow runs the full project check and creates a
+draft GitHub Release. Open that draft, select **Publish this Action to GitHub Marketplace**, choose its categories,
+and publish it. The publication event automatically moves `v0` to the released commit and smoke-tests the public
+action reference.
+
 Pin the `version` input to an exact CLI version when reproducibility matters. Setup ArchSmith passes validated values
 to npm as process arguments without shell interpolation and installs into an isolated runner directory.
 
