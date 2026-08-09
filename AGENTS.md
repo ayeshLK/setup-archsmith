@@ -19,6 +19,19 @@ request automation are outside the action's current scope.
 - `.github/ISSUE_TEMPLATE/` and `.github/PULL_REQUEST_TEMPLATE.md` define contributor intake templates.
 - `SECURITY.md` and `CODE_OF_CONDUCT.md` define private reporting and community standards.
 
+## GitHub repository settings
+
+The following protections live in GitHub rather than in version-controlled files. Verify them before changing
+workflows or repository administration settings:
+
+- `main` is protected and requires the `CI` and `Integration` status checks from an up-to-date branch.
+- Force pushes and deletion of `main` are disabled. Required reviews and administrator enforcement are not enabled.
+- Dependabot alerts and security updates are enabled. Version updates are configured in `.github/dependabot.yml`.
+- Private vulnerability reporting, secret scanning, and secret-scanning push protection are enabled.
+
+Do not silently weaken these settings. If a required job is renamed or replaced, coordinate the workflow and branch
+protection changes so pull requests are never left with a required check that cannot run.
+
 ## Development setup
 
 Use Node.js 20 or newer and npm.
@@ -43,11 +56,16 @@ git diff --exit-code -- dist
 generated bundle was committed after a source change. Documentation-only changes do not require rebuilding the
 bundle, but YAML examples and workflow files must remain valid YAML.
 
+The `CI` job name and the aggregate `Integration` job name are required branch-protection contexts. Keep both names
+stable. The aggregate integration job must continue to run with `always()` and fail unless the full platform matrix
+succeeds.
+
 ## Implementation invariants
 
 - Treat action inputs, npm registry responses, executable output, and environment values as untrusted data.
 - Pass values to child processes as argument arrays. Never interpolate an input into a shell command.
 - Resolve a version, range, or dist-tag to one exact published version before installation.
+- Resolve CLI releases dynamically from npm; do not introduce a hardcoded list of ArchSmith CLI versions.
 - Install outside the checked-out consumer repository, using the runner temporary directory.
 - Check the consumer workflow's `node` executable on `PATH`; the JavaScript Action runtime version is not a substitute.
 - Require Node.js 20 or newer and an executable npm installation.
@@ -73,6 +91,8 @@ bundle, but YAML examples and workflow files must remain valid YAML.
 - Never edit files in `dist/` manually. Run `npm run build` and commit all resulting bundle changes with the source.
 - Review dependency updates for their Node.js runtime requirements before adopting them.
 - Pin external workflow actions to full commit SHAs with same-line release comments; Dependabot maintains both.
+- Local `uses: ./` references and the Release workflow's deliberate `ayeshLK/setup-archsmith@v0` smoke test are
+  exceptions to the external-action SHA-pinning rule.
 - Keep TypeScript on `5.9.x` until `@vercel/ncc` can build the action with TypeScript 7.
 
 ## Documentation
