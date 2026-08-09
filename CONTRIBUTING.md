@@ -59,6 +59,30 @@ rebuilt `dist/` files in the same commit. Documentation-only changes do not requ
 
 Pull requests also run the CI workflow and the Ubuntu, macOS, Windows, and supported Node.js integration matrix.
 
+## Dependency updates
+
+Dependabot checks npm and GitHub Actions dependencies weekly. Minor and patch updates are grouped by dependency type
+to reduce pull request noise; major updates remain separate so their compatibility and runtime effects can be
+reviewed independently. Security updates should be reviewed promptly and are never auto-merged.
+
+Every external action used by this repository's workflows must be pinned to a full 40-character commit SHA with the
+corresponding release tag in a same-line comment. Dependabot maintains both the SHA and comment. Local actions such
+as `uses: ./` and the Release workflow's deliberate smoke test of this repository's moving `v0` tag are exceptions.
+
+When reviewing an npm dependency pull request:
+
+- read the upstream release notes and check Node.js runtime requirements;
+- review `package.json` and `package-lock.json` together;
+- run `npm run check` and inspect the generated `dist/` changes; and
+- merge only after the CI and Integration checks pass.
+
+For GitHub Actions updates, verify that each new SHA belongs to the expected upstream repository, review the release
+notes, and merge only after the same required checks pass.
+
+TypeScript remains pinned to the latest `5.9.x` release because `@vercel/ncc` does not yet support the TypeScript 7
+compiler. Do not remove the Dependabot ignore rule until the bundling toolchain builds and tests successfully with
+TypeScript 7.
+
 ## Commits and pull requests
 
 Keep commits atomic and use a short Conventional Commit-style subject where practical, for example:

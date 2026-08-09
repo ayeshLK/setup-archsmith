@@ -15,6 +15,7 @@ request automation are outside the action's current scope.
 - `.github/workflows/ci.yml` validates source and bundle consistency.
 - `.github/workflows/integration.yml` tests supported operating-system and Node.js combinations.
 - `.github/workflows/release.yml` prepares releases, maintains `v0`, and smoke-tests published releases.
+- `.github/dependabot.yml` schedules npm and GitHub Actions dependency updates.
 - `.github/ISSUE_TEMPLATE/` and `.github/PULL_REQUEST_TEMPLATE.md` define contributor intake templates.
 - `SECURITY.md` and `CODE_OF_CONDUCT.md` define private reporting and community standards.
 
@@ -71,6 +72,8 @@ bundle, but YAML examples and workflow files must remain valid YAML.
 - Use npm to update dependency metadata and the lockfile.
 - Never edit files in `dist/` manually. Run `npm run build` and commit all resulting bundle changes with the source.
 - Review dependency updates for their Node.js runtime requirements before adopting them.
+- Pin external workflow actions to full commit SHAs with same-line release comments; Dependabot maintains both.
+- Keep TypeScript on `5.9.x` until `@vercel/ncc` can build the action with TypeScript 7.
 
 ## Documentation
 
