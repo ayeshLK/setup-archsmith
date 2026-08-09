@@ -6,6 +6,8 @@ cross-platform improvements, and focused enhancements that preserve the action's
 ## Before you start
 
 - Search [existing issues](https://github.com/ayeshLK/setup-archsmith/issues) before opening a new one.
+- Follow the project's [Code of Conduct](CODE_OF_CONDUCT.md) in all project spaces.
+- Report suspected vulnerabilities privately according to the [Security Policy](SECURITY.md), not in a public issue.
 - Small fixes and documentation improvements can go directly to a pull request.
 - For a new input, output, dependency, caching behavior, or other significant design change, open an issue first so
   the public contract and compatibility impact can be discussed.
@@ -75,6 +77,9 @@ A pull request should:
 - include appropriate tests and documentation;
 - include the rebuilt bundle when required; and
 - list the checks performed locally.
+
+The pull request template includes checks for testing, generated bundle consistency, documentation, and release
+impact. Mark a check as not applicable and explain why when a narrowly scoped change does not require it.
 
 Maintainers may ask for a change to be split when unrelated concerns are combined.
 

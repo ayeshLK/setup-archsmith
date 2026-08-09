@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose a focused improvement to Setup ArchSmith
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Setup ArchSmith intentionally focuses on installing the ArchSmith CLI
+        and making it available to later workflow steps.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched the existing issues for related proposals.
+          required: true
+        - label: I reviewed the project boundaries in CONTRIBUTING.md.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What workflow problem would this change solve, and who encounters it?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the desired behavior, including an example workflow when useful.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe workarounds or other designs you considered.
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility and scope
+      description: Note any new inputs, outputs, permissions, dependencies, runner requirements, or breaking changes.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add links, screenshots, or other context that supports the proposal.

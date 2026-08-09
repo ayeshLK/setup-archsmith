@@ -15,6 +15,8 @@ request automation are outside the action's current scope.
 - `.github/workflows/ci.yml` validates source and bundle consistency.
 - `.github/workflows/integration.yml` tests supported operating-system and Node.js combinations.
 - `.github/workflows/release.yml` prepares releases, maintains `v0`, and smoke-tests published releases.
+- `.github/ISSUE_TEMPLATE/` and `.github/PULL_REQUEST_TEMPLATE.md` define contributor intake templates.
+- `SECURITY.md` and `CODE_OF_CONDUCT.md` define private reporting and community standards.
 
 ## Development setup
 

@@ -1,0 +1,83 @@
+name: Bug report
+description: Report a reproducible problem with Setup ArchSmith
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Setup ArchSmith. Search existing issues before submitting a report.
+
+        **Do not include credentials, npm tokens, private registry URLs, or other secrets.** Report security
+        vulnerabilities through the private link in the issue chooser instead of using this form.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched the existing issues for duplicates.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What happened, and what did you expect to happen?
+      placeholder: Describe the observed and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide the smallest safe workflow or steps that reproduce the problem.
+      render: yaml
+    validations:
+      required: true
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner operating system
+      options:
+        - Ubuntu
+        - macOS
+        - Windows
+        - Self-hosted or other
+    validations:
+      required: true
+  - type: input
+    id: action-version
+    attributes:
+      label: Action reference
+      description: The action tag or full commit SHA used by the workflow.
+      placeholder: ayeshLK/setup-archsmith@v0
+    validations:
+      required: true
+  - type: input
+    id: cli-version
+    attributes:
+      label: ArchSmith CLI version
+      description: Include both the requested version and exact installed version, if available.
+      placeholder: Requested 0.5.x; installed 0.5.2
+    validations:
+      required: true
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      placeholder: 20.19.0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste only the relevant, redacted output. This field is formatted as text automatically.
+      render: text
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add anything else that may help diagnose the problem.
