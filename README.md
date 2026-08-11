@@ -10,6 +10,9 @@ Set up the [ArchSmith CLI](https://www.npmjs.com/package/@archsmith/cli) in a Gi
 [Setup ArchSmith is available on GitHub Marketplace](https://github.com/marketplace/actions/setup-archsmith) and can
 be used as `ayeshLK/setup-archsmith@v0`.
 
+Reusable artwork and announcement copy are available in the
+[social preview and launch kit](docs/social-preview/README.md).
+
 This action:
 
 - resolves an exact version from an npm version, range, or dist-tag;

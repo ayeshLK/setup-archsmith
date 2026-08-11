@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+  <title id="title">Setup ArchSmith</title>
+  <desc id="description">Install the ArchSmith CLI in GitHub Actions, then validate and render architecture diagrams.</desc>
+  <defs>
+    <pattern id="grid" width="96" height="96" patternUnits="userSpaceOnUse">
+      <path d="M 96 0 L 0 0 0 96" fill="none" stroke="#2B3350" stroke-width="1"/>
+      <circle cx="0" cy="0" r="3" fill="#48506B"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#10172E" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="640" fill="#182449"/>
+  <rect width="1280" height="640" fill="url(#grid)" opacity="0.7"/>
+  <g aria-label="Setup ArchSmith name and description">
+    <rect x="64" y="166" width="68" height="8" rx="4" fill="#D9F2EC"/>
+    <rect x="142" y="166" width="68" height="8" rx="4" fill="#5B3A9E"/>
+    <rect x="220" y="166" width="68" height="8" rx="4" fill="#177F6B"/>
+    <rect x="298" y="166" width="68" height="8" rx="4" fill="#92600E"/>
+    <text x="60" y="260" fill="#D9F2EC" font-family="Arimo, Arial, sans-serif" font-size="34" font-weight="700">SETUP</text>
+    <text x="60" y="342" fill="#FFFFFF" font-family="Arimo, Arial, sans-serif" font-size="82" font-weight="700">ArchSmith</text>
+    <text x="66" y="400" fill="#D9F2EC" font-family="Arimo, Arial, sans-serif" font-size="25" font-weight="700">
+      <tspan x="66">Install the CLI in GitHub Actions.</tspan>
+      <tspan x="66" dy="36">Validate. Render. Ship.</tspan>
+    </text>
+  </g>
+  <g filter="url(#shadow)" aria-label="GitHub Actions workflow installing ArchSmith and producing an SVG diagram">
+    <rect x="580" y="76" width="640" height="488" rx="20" fill="#FFFFFF" stroke="#D9DCE7" stroke-width="2"/>
+    <circle cx="618" cy="112" r="7" fill="#5B3A9E"/>
+    <text x="638" y="120" fill="#182449" font-family="Arimo, Arial, sans-serif" font-size="23" font-weight="700">GitHub Actions workflow</text>
+    <line x1="637" y1="173" x2="637" y2="453" stroke="#D9DCE7" stroke-width="4"/>
+    <g>
+      <circle cx="637" cy="183" r="16" fill="#D9F2EC" stroke="#177F6B" stroke-width="3"/>
+      <path d="M630 183l5 5 10-12" fill="none" stroke="#156150" stroke-width="3"/>
+      <text x="677" y="177" fill="#6B7280" font-family="Arimo, Arial, sans-serif" font-size="14" font-weight="700">INSTALL</text>
+      <text x="677" y="201" fill="#182449" font-family="Arimo, Arial, sans-serif" font-size="20" font-weight="700">ayeshLK/setup-archsmith@v0</text>
+    </g>
+    <g>
+      <circle cx="637" cy="277" r="16" fill="#F4EFFC" stroke="#5B3A9E" stroke-width="3"/>
+      <path d="M630 277l5 5 10-12" fill="none" stroke="#5B3A9E" stroke-width="3"/>
+      <text x="677" y="271" fill="#6B7280" font-family="Arimo, Arial, sans-serif" font-size="14" font-weight="700">VALIDATE</text>
+      <text x="677" y="295" fill="#182449" font-family="Arimo, Arial, sans-serif" font-size="20" font-weight="700">archsmith validate</text>
+    </g>
+    <g>
+      <circle cx="637" cy="371" r="16" fill="#FDF3D9" stroke="#92600E" stroke-width="3"/>
+      <path d="M630 371l5 5 10-12" fill="none" stroke="#92600E" stroke-width="3"/>
+      <text x="677" y="365" fill="#6B7280" font-family="Arimo, Arial, sans-serif" font-size="14" font-weight="700">RENDER</text>
+      <text x="677" y="389" fill="#182449" font-family="Arimo, Arial, sans-serif" font-size="20" font-weight="700">archsmith render</text>
+    </g>
+    <g>
+      <circle cx="637" cy="465" r="16" fill="#E3F5F0" stroke="#177F6B" stroke-width="3"/>
+      <path d="M630 465l5 5 10-12" fill="none" stroke="#156150" stroke-width="3"/>
+      <text x="677" y="459" fill="#6B7280" font-family="Arimo, Arial, sans-serif" font-size="14" font-weight="700">OUTPUT</text>
+      <text x="677" y="483" fill="#182449" font-family="Arimo, Arial, sans-serif" font-size="20" font-weight="700">architecture.svg</text>
+    </g>
+    <g aria-label="Architecture diagram icon">
+      <rect x="1038" y="428" width="126" height="78" rx="10" fill="#F8F5FC" stroke="#5B3A9E" stroke-width="2"/>
+      <rect x="1052" y="442" width="24" height="50" rx="5" fill="#FFFFFF" stroke="#1B2333" stroke-width="1.5"/>
+      <rect x="1084" y="442" width="16" height="50" rx="5" fill="#D9F2EC" stroke="#177F6B" stroke-width="1.5"/>
+      <rect x="1108" y="442" width="42" height="50" rx="5" fill="#FFFFFF" stroke="#5B3A9E" stroke-width="1.5"/>
+      <line x1="1076" y1="467" x2="1084" y2="467" stroke="#6B7280"/>
+      <line x1="1100" y1="467" x2="1108" y2="467" stroke="#6B7280"/>
+    </g>
+  </g>
+</svg>
