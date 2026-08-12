@@ -197,6 +197,11 @@ draft GitHub Release. Open that draft, select **Publish this Action to GitHub Ma
 and publish it. The publication event automatically moves `v0` to the released commit and smoke-tests the public
 action reference.
 
+Version-specific GitHub Releases are immutable. Published tags and assets are never replaced; fixes use a new patch
+version. The floating `v0` tag is not attached to a release and remains movable by the Release workflow so consumers
+receive the latest compatible `0.x` action. Maintainer branch-protection, emergency-bypass, rollback, and release
+integrity procedures are documented in [CONTRIBUTING.md](CONTRIBUTING.md#releases).
+
 Pin the `version` input to an exact CLI version when reproducibility matters. Setup ArchSmith passes validated values
 to npm as process arguments without shell interpolation and installs into an isolated runner directory.
 

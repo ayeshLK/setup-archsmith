@@ -113,6 +113,35 @@ Releases and Marketplace publication are maintainer tasks. Contributors should n
 moving `v0` tag. Maintainers use the repository's `Release` workflow and complete the Marketplace confirmation in the
 GitHub release interface.
 
+### Protected branch policy
+
+`main` requires the up-to-date `CI` and aggregate `Integration` checks. Force pushes and branch deletion are disabled.
+The repository currently has one maintainer, so pull request approvals are not required and administrators are not
+subject to branch protection. This avoids requiring a maintainer to approve their own pull request while retaining an
+emergency bypass for repository recovery. If the maintainer team grows, enable at least one required approval and
+administrator enforcement after confirming that an independent reviewer and a documented recovery path are available.
+
+Normal changes should still use a pull request and pass both required checks. Administrator bypass is reserved for an
+active security incident, an unavailable required check, or repair of broken repository automation. Before bypassing,
+verify the exact target commit locally and preserve force-push and deletion protections. Afterward, open a tracking
+issue, explain the reason and changes, and run or restore the required checks as soon as practical. Never rename the
+`CI` or `Integration` jobs without updating branch protection in the same maintenance window.
+
+### Release integrity policy
+
+Release immutability is enabled for the repository. Once a version-specific release such as `v0.1.1` is published, its
+tag and assets must not be changed. Correct a bad release by publishing a new patch version; do not replace or reuse a
+published version tag.
+
+The floating `v0` tag is deliberately not attached to a GitHub Release. Publishing a stable `v0.x.y` release triggers
+the `Release` workflow, which resolves the immutable release tag, moves `v0` to the same commit, and smoke-tests
+`ayeshLK/setup-archsmith@v0`. Do not move `v0` manually during a normal release.
+
+For an emergency rollback, first identify a previously published, trusted `v0.x.y` release and verify its commit. Run
+the `Release` workflow's normal checks against the intended state when possible, then move only `v0` to that immutable
+release commit. Record the rollback in a public issue or security advisory as appropriate, and follow it with a new
+patch release. Do not disable release immutability or alter the version-specific tag.
+
 ## License
 
 By contributing, you agree that your contribution is licensed under the repository's
