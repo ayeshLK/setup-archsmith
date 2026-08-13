@@ -201,11 +201,12 @@ Published versions are available from [GitHub Releases](https://github.com/ayesh
 is a moving major tag and releases such as `v0.1.0` identify action versions. For security-sensitive workflows, pin
 the action to a full commit SHA and use Dependabot or another controlled process to review updates.
 
-To prepare the next release, update the version in `package.json`, push the validated changes to `main`, and run the
-**Release** workflow with the matching tag, such as `v0.1.0`. The workflow runs the full project check and creates a
-draft GitHub Release. Open that draft, select **Publish this Action to GitHub Marketplace**, choose its categories,
-and publish it. The publication event automatically moves `v0` to the released commit and smoke-tests the public
-action reference.
+User-visible pull requests record their release impact with Changesets. To prepare the next release, run
+`npm run release:version` on a dedicated branch, review and merge the generated version and changelog updates, then
+run the **Release** workflow from `main` with the resulting tag, such as `v0.2.0`. The workflow runs the full project
+check and creates a draft GitHub Release. Open that draft, select **Publish this Action to GitHub Marketplace**, choose
+its categories, and publish it. The publication event automatically moves `v0` to the released commit and smoke-tests
+the public action reference.
 
 Version-specific GitHub Releases are immutable. Published tags and assets are never replaced; fixes use a new patch
 version. The floating `v0` tag is not attached to a release and remains movable by the Release workflow so consumers

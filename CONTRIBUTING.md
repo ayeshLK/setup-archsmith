@@ -47,6 +47,8 @@ settings must continue to work. Tests must use mocked npm calls and must verify 
 - Keep `action.yml`, README examples, and tests synchronized when changing an input or output.
 - Use `*.archsmith.json` in documentation examples.
 - Update dependencies through npm, pin direct dependencies exactly, and commit `package-lock.json` changes.
+- Add a changeset with `npm run changeset` for every user-visible fix or feature. Tests, documentation, and repository
+  maintenance with no release impact do not require one.
 - If you use a coding agent, review [AGENTS.md](AGENTS.md) first and remain responsible for the submitted changes.
 
 ## Verifying changes
@@ -117,6 +119,12 @@ Maintainers may ask for a change to be split when unrelated concerns are combine
 Releases and Marketplace publication are maintainer tasks. Contributors should not create release tags or modify the
 moving `v0` tag. Maintainers use the repository's `Release` workflow and complete the Marketplace confirmation in the
 GitHub release interface.
+
+User-visible pull requests include a file under `.changeset/` that records their semantic-version impact and release
+note. When a release is ready, run `npm run release:version` on a dedicated branch. Changesets consumes all pending
+entries, selects the highest required bump, updates `package.json` and `CHANGELOG.md`, and npm synchronizes
+`package-lock.json`. Review the result, run the required checks, and merge it through a release preparation pull
+request before invoking the `Release` workflow with the resulting `v0.x.y` version.
 
 ### Protected branch policy
 

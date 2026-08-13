@@ -107,6 +107,8 @@ succeeds.
 
 - Keep commits atomic and use Conventional Commit-style subjects such as `feat:`, `fix:`, `test:`, `ci:`, and `docs:`.
 - Do not rewrite unrelated user changes.
+- Add a changeset for every user-visible fix or feature. Use `npm run release:version` to consume pending changesets
+  on a dedicated release-preparation branch; do not edit package versions or generated changelog entries manually.
 - Releases are maintainer operations. Use the `Release` workflow rather than manually creating or moving release tags.
 - Do not publish releases, move `v0`, or change Marketplace metadata unless the user explicitly requests it.
 
