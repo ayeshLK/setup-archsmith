@@ -35,6 +35,11 @@ on pull requests. Proposals that expand this boundary should begin with an issue
 The action accepts untrusted workflow input and invokes npm, so changes must avoid shell interpolation and keep error
 messages free of captured credentials or sensitive registry details.
 
+Resolution and installation use explicit generic and `@archsmith` scoped settings for `https://registry.npmjs.org/`.
+Keep those arguments centralized and identical so repository, user, global, or environment registry configuration
+cannot redirect either operation. Do not clear unrelated npm configuration: proxy, custom-CA, and other safe network
+settings must continue to work. Tests must use mocked npm calls and must verify failures do not expose captured stderr.
+
 ## Making changes
 
 - Edit the TypeScript source in `src/`, not the generated bundle in `dist/`.

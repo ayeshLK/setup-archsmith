@@ -4,6 +4,7 @@ import path from 'node:path';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {run, runAction, type ActionDependencies} from '../src/action.js';
 import type {Execute} from '../src/install.js';
+import {NPM_REGISTRY} from '../src/registry.js';
 
 const createdDirectories: string[] = [];
 
@@ -59,6 +60,54 @@ describe('runAction', () => {
     expect(core.setOutput).toHaveBeenCalledWith('version', '0.5.1');
     expect(core.addPath).toHaveBeenCalledWith(expect.stringContaining(path.join('node_modules', '.bin')));
     expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['0.5.1', '"0.5.1"'],
+    ['0.5.x', '["0.5.0","0.5.1"]'],
+    ['latest', '"0.5.1"'],
+  ])('overrides repository registry configuration while resolving %s', async (version, response) => {
+    const runnerTemp = await mkdtemp(path.join(tmpdir(), 'setup-archsmith-registry-'));
+    createdDirectories.push(runnerTemp);
+    await writeFile(
+      path.join(runnerTemp, '.npmrc'),
+      'registry=https://attacker.invalid/\n@archsmith:registry=https://attacker.invalid/\n',
+    );
+    const core = makeCore(version);
+    const calls: string[][] = [];
+
+    const execute: Execute = async (command, args) => {
+      calls.push([...args]);
+      if (command.endsWith('/node')) return {exitCode: 0, stdout: 'v20.19.0\n', stderr: ''};
+      if (args[0] === '--version') return {exitCode: 0, stdout: '10.9.0\n', stderr: ''};
+      if (args[0] === 'view') return {exitCode: 0, stdout: response, stderr: ''};
+      if (args[0] === 'install') {
+        const prefix = args[args.indexOf('--prefix') + 1]!;
+        const packageDirectory = path.join(prefix, 'node_modules', '@archsmith', 'cli');
+        const binDirectory = path.join(prefix, 'node_modules', '.bin');
+        await mkdir(packageDirectory, {recursive: true});
+        await mkdir(binDirectory, {recursive: true});
+        await writeFile(path.join(packageDirectory, 'package.json'), JSON.stringify({version: '0.5.1'}));
+        await writeFile(path.join(binDirectory, 'archsmith'), '#!/bin/sh\n');
+        return {exitCode: 0, stdout: '', stderr: ''};
+      }
+      return {exitCode: 0, stdout: '0.5.1\n', stderr: ''};
+    };
+
+    await runAction({
+      core,
+      execute,
+      which: vi.fn(async (tool) => `/usr/bin/${tool}`),
+      environment: {RUNNER_TEMP: runnerTemp, NPM_CONFIG_REGISTRY: 'https://environment.invalid/'},
+      platform: 'linux',
+    });
+
+    const registryArguments = [`--registry=${NPM_REGISTRY}`, `--@archsmith:registry=${NPM_REGISTRY}`];
+    const resolution = calls.find((args) => args[0] === 'view');
+    const installation = calls.find((args) => args[0] === 'install');
+    expect(resolution).toEqual(expect.arrayContaining(registryArguments));
+    expect(installation).toEqual(expect.arrayContaining(registryArguments));
+    expect(core.setOutput).toHaveBeenCalledWith('version', '0.5.1');
   });
 
   it('reports a secret-safe resolution error', async () => {
