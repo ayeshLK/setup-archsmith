@@ -16,6 +16,7 @@
 - [ ] I added or updated tests for behavior changes.
 - [ ] I committed the rebuilt `dist/` bundle for source or dependency changes.
 - [ ] I synchronized `action.yml`, documentation, and examples for public contract changes.
+- [ ] I added a changeset for a user-visible change, or marked the release impact as none.
 
 ## Release impact
 
