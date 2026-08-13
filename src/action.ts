@@ -3,6 +3,7 @@ import * as exec from '@actions/exec';
 import * as io from '@actions/io';
 import {assertNpmAvailable, createInstallDirectory, installAndVerify, type Execute} from './install.js';
 import {assertSupportedNode} from './prerequisites.js';
+import {TRUSTED_REGISTRY_ARGS} from './registry.js';
 import {parseResolvedVersion, validateVersionSpec} from './version.js';
 
 type CoreApi = Pick<typeof core, 'addPath' | 'getInput' | 'info' | 'setFailed' | 'setOutput'>;
@@ -58,7 +59,7 @@ export async function runAction(dependencies: ActionDependencies): Promise<void>
   dependencies.core.info(`Resolving @archsmith/cli@${spec.value}`);
   const resolution = await dependencies.execute(
     npmPath,
-    ['view', `@archsmith/cli@${spec.value}`, 'version', '--json'],
+    ['view', `@archsmith/cli@${spec.value}`, 'version', '--json', ...TRUSTED_REGISTRY_ARGS],
     {silent: true},
   );
   if (resolution.exitCode !== 0) {

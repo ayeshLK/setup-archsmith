@@ -3,6 +3,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {afterEach, describe, expect, it} from 'vitest';
 import {assertNpmAvailable, createInstallDirectory, installAndVerify, type Execute} from '../src/install.js';
+import {NPM_REGISTRY} from '../src/registry.js';
 
 const createdDirectories: string[] = [];
 
@@ -49,6 +50,22 @@ describe('installAndVerify', () => {
     const result = await installAndVerify('/usr/bin/npm', '0.5.1', directory, 'linux', execute);
     expect(result).toEqual({binDirectory, cliVersionOutput: '0.5.1'});
     expect(calls[0]).toContain('@archsmith/cli@0.5.1');
+    expect(calls[0]).toContain(`--registry=${NPM_REGISTRY}`);
+    expect(calls[0]).toContain(`--@archsmith:registry=${NPM_REGISTRY}`);
     expect(await readFile(path.join(packageDirectory, 'package.json'), 'utf8')).toContain('0.5.1');
+  });
+
+  it('does not include npm stderr in an installation failure', async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), 'setup-archsmith-install-error-'));
+    createdDirectories.push(directory);
+    const execute: Execute = async () => ({
+      exitCode: 1,
+      stdout: '',
+      stderr: 'npm ERR! https://user:secret-token@registry.example.invalid/private',
+    });
+
+    await expect(installAndVerify('/usr/bin/npm', '0.5.1', directory, 'linux', execute)).rejects.toThrow(
+      'npm failed to install @archsmith/cli@0.5.1. Check npm registry access and whether the requested version is installable.',
+    );
   });
 });

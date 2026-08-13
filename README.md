@@ -165,6 +165,16 @@ Self-hosted runners must provide:
 - npm on `PATH`; and
 - access to the public npm registry.
 
+## npm registry policy
+
+Setup ArchSmith resolves and installs `@archsmith/cli` exclusively from `https://registry.npmjs.org/`. Both npm
+operations receive explicit generic and `@archsmith` scoped registry settings, so repository, user, global, and
+environment configuration cannot redirect the package to another registry. Registry mirrors are not supported.
+
+Other npm networking settings remain available, including `proxy`, `https-proxy`, `ca`, and `cafile`. This allows
+corporate proxies and custom certificate authorities without changing the trusted package source. The action does not
+print captured npm stderr, registry credentials, or authentication tokens when resolution or installation fails.
+
 ## Permissions
 
 Setup ArchSmith does not use `GITHUB_TOKEN` or call GitHub APIs. A workflow that checks out repository files can use
@@ -177,9 +187,9 @@ permissions:
 
 ## How it works
 
-The action validates its prerequisites and version input, resolves the request to an exact published version,
-installs that version in a runner temporary directory, verifies the package and executable, adds its executable
-directory to `PATH`, and emits the exact `version` output.
+The action validates its prerequisites and version input, resolves the request from the public npm registry to an
+exact published version, installs that version from the same registry in a runner temporary directory, verifies the
+package and executable, adds its executable directory to `PATH`, and emits the exact `version` output.
 
 It does not modify checked-out files or repository history. Cross-run caching, file discovery, validation, rendering,
 commits, pull-request comments, hosted SVGs, and artifact management are intentionally outside its scope.
